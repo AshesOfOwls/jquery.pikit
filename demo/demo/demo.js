@@ -1,0 +1,3 @@
+$(function() {
+  $(".container").children().picholder();
+});
