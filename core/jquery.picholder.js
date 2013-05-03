@@ -5,17 +5,17 @@
     var Plugin, defaults, pluginName;
     pluginName = "picholder";
     defaults = {
-      service: 'fpoimg',
+      service: 'placeboxes',
       height: 200,
       width: 400,
-      image_size_keyword: null,
+      format: 'jpg',
+      sizeKeyword: null,
       greyscale: false,
-      image_format: 'jpg',
-      text: null,
-      text_color: null,
-      background_color: null,
+      backColor: null,
+      foreColor: null,
+      customText: null,
       category: null,
-      variant: 1
+      variant: null
     };
     Plugin = (function() {
 
@@ -23,12 +23,78 @@
         this.element = element;
         this.options = $.extend({}, defaults, options);
         this.$container = $(element);
+        this.services = {
+          dummyimage: {
+            url: 'dummyimage.com/g/widthxheight/backColor/foreColor.format&text=customText',
+            greyscale: '/g',
+            sizeKeyword: '/widthxheight',
+            backColor: '/backColor',
+            foreColor: '/foreColor',
+            format: '.format',
+            customText: '&text=customText'
+          },
+          fpoimg: {
+            url: 'fpoimg.com/widthxheight?&bg_color=backColor&text_color=foreColor&text=customText',
+            backColor: '&bg_color=backColor',
+            foreColor: '&text_color=foreColor',
+            customText: '&text=customText'
+          },
+          instasrc: {
+            url: 'instasrc.com/width/height/category/greyscale',
+            category: '/category',
+            greyscale: '/greyscale'
+          },
+          lorempixel: {
+            url: 'lorempixel.com/g/width/height/category/variant',
+            category: '/category',
+            greyscale: '/g',
+            variant: '/variant'
+          },
+          nosrc: {
+            url: 'nosrc.net/widthxheight'
+          },
+          placeboxes: {
+            url: 'placebox.es/width/height/backColor/foreColor/customText',
+            backColor: '/backColor',
+            foreColor: '/foreColor',
+            customText: '/customText'
+          },
+          placedog: {
+            url: 'placedog.com/g/width/height',
+            greyscale: '/g'
+          },
+          placeholdit: {
+            url: 'placehold.it/widthxheight/backColor/foreColor.format&text=customText',
+            backColor: '/backColor',
+            foreColor: '/foreColor',
+            format: '.format',
+            customText: '&text=customText'
+          },
+          placekitten: {
+            url: 'placekitten.com/g/width/height',
+            greyscale: '/g'
+          },
+          placesheen: {
+            url: 'placesheen.com/width/height'
+          },
+          placezombies: {
+            url: 'placezombies.com/g/widthxheight',
+            greyscale: '/g'
+          },
+          placepuppy: {
+            url: 'placepuppy.it/width/height'
+          },
+          nicenicejpg: {
+            url: 'nicenicejpg.com/width/height'
+          }
+        };
         this.parseOptions();
-        this.init();
+        this.create();
       }
 
       Plugin.prototype.parseOptions = function() {
-        var height, width;
+        var height, service, width;
+        service = this.options.service;
         height = this.options.height;
         width = this.options.width;
         if (!(height >= 1)) {
@@ -39,7 +105,7 @@
         }
       };
 
-      Plugin.prototype.init = function() {
+      Plugin.prototype.create = function() {
         var $img, url;
         url = this.generateUrl();
         $img = $('<img src="' + url + '" />');
@@ -47,110 +113,31 @@
       };
 
       Plugin.prototype.generateUrl = function() {
-        var background_color, category, greyscale, height, image_format, image_size_keyword, service, text, text_color, url, variant, width;
+        var attribute, i, replacable_attrs, service, service_data, url, _i, _ref;
         service = this.options.service;
-        height = this.options.height;
-        width = this.options.width;
-        greyscale = this.options.greyscale;
-        category = this.options.category;
-        image_format = this.options.image_format;
-        text = this.options.text;
-        text_color = this.options.text_color;
-        background_color = this.options.background_color;
-        variant = this.options.variant;
-        image_size_keyword = this.options.image_size_keyword;
-        url = 'http://www.';
-        switch (service) {
-          case 'placehold.it':
-            url += 'placehold.it/' + width + 'x' + height;
-            if (background_color) {
-              url += '/' + background_color;
-            }
-            if (text_color) {
-              url += '/' + text_color;
-            }
-            url += image_format;
-            if (text) {
-              url += '&text=' + text;
-            }
-            break;
-          case 'placekitten':
-            url += 'placekitten.com/';
-            if (greyscale) {
-              url += 'g/';
-            }
-            url += width + '/' + height;
-            break;
-          case 'placesheen':
-            url += 'placesheen.com/' + width + '/' + height;
-            break;
-          case 'lorempixel':
-            url += 'lorempixel.com/';
-            if (greyscale) {
-              url += 'g/';
-            }
-            url += width + '/' + height;
-            if (category) {
-              url += '/' + category;
-            }
-            if (variant) {
-              url += '/' + variant;
-            }
-            if (text) {
-              url += '/' + text;
-            }
-            break;
-          case 'placedog':
-            url += 'placedog.com/';
-            if (greyscale) {
-              url += 'g/';
-            }
-            url += width + '/' + height;
-            break;
-          case 'dummyimage':
-            url += 'dummyimage.com/';
-            if (image_size_keyword) {
-              url += image_size_keyword;
+        service_data = this.services[service];
+        url = 'http://' + service_data.url;
+        if (this.options.sizeKeyword && service_data.sizeKeyword) {
+          url = url.replace(/width[x,\/]height/, this.options.sizeKeyword);
+        } else {
+          url = url.replace('height', this.options.height);
+          url = url.replace('width', this.options.width);
+        }
+        if (service_data.greyscale) {
+          if (!this.options.greyscale) {
+            url = url.replace(service_data.greyscale, '');
+          }
+        }
+        replacable_attrs = ['backColor', 'foreColor', 'format', 'customText', 'category', 'variant'];
+        for (i = _i = 0, _ref = replacable_attrs.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          attribute = replacable_attrs[i];
+          if (service_data[attribute]) {
+            if (this.options[attribute]) {
+              url = url.replace(attribute, this.options[attribute]);
             } else {
-              url += width + 'x' + height;
+              url = url.replace(service_data[attribute], '');
             }
-            if (background_color) {
-              url += '/' + background_color;
-            }
-            if (text_color) {
-              url += '/' + text_color;
-            }
-            url += image_format;
-            if (text) {
-              url += '&text=' + text;
-            }
-            break;
-          case 'instasrc':
-            url += 'instasrc.com/';
-            url += width + '/' + height;
-            if (category) {
-              url += '/' + category;
-            }
-            if (greyscale) {
-              url += '/greyscale';
-            }
-            break;
-          case 'nosrc':
-            url += 'nosrc.net/';
-            url += width + 'x' + height;
-            break;
-          case 'fpoimg':
-            url += 'fpoimg.com/';
-            url += width + 'x' + height + '?';
-            if (text) {
-              url += '&text=' + text;
-            }
-            if (background_color) {
-              url += '&bg_color=' + background_color;
-            }
-            if (text_color) {
-              url += '&text_color=' + text_color;
-            }
+          }
         }
         return url;
       };

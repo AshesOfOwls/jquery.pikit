@@ -7,29 +7,100 @@
 (($, window, document) ->
   pluginName = "picholder"
   defaults =
-    service: 'fpoimg'
+    service: 'placeboxes'
 
+    # Formatting
     height: 200
     width: 400
-    image_size_keyword: null 
+    format: 'jpg'
+    sizeKeyword: null
 
+    # Colors
     greyscale: false
-    image_format: 'jpg'
-    text: null
-    text_color: null
-    background_color: null
+    backColor: null
+    foreColor: null
+
+    # Customize
+    customText: null
+
+    # Specify
     category: null
-    variant: 1
+    variant: null
 
   class Plugin
     constructor: (@element, options) ->
       @options = $.extend {}, defaults, options
       @$container = $(element)
 
+      @services =
+        dummyimage: 
+          url: 'dummyimage.com/g/widthxheight/backColor/foreColor.format&text=customText'
+          greyscale: '/g'
+          sizeKeyword: '/widthxheight'
+          backColor: '/backColor'
+          foreColor: '/foreColor'
+          format: '.format'
+          customText: '&text=customText'
+
+        fpoimg:
+          url: 'fpoimg.com/widthxheight?&bg_color=backColor&text_color=foreColor&text=customText'
+          backColor: '&bg_color=backColor'
+          foreColor: '&text_color=foreColor'
+          customText: '&text=customText'
+
+        instasrc:
+          url: 'instasrc.com/width/height/category/greyscale'
+          category: '/category'
+          greyscale: '/greyscale'
+
+        lorempixel: 
+          url: 'lorempixel.com/g/width/height/category/variant'
+          category: '/category'
+          greyscale: '/g'
+          variant: '/variant'
+
+        nosrc:
+          url: 'nosrc.net/widthxheight'
+
+        placeboxes: 
+          url: 'placebox.es/width/height/backColor/foreColor/customText'
+          backColor: '/backColor'
+          foreColor: '/foreColor'
+          customText: '/customText'
+
+        placedog: 
+          url: 'placedog.com/g/width/height'
+          greyscale: '/g'
+
+        placeholdit: 
+          url: 'placehold.it/widthxheight/backColor/foreColor.format&text=customText'
+          backColor: '/backColor'
+          foreColor: '/foreColor'
+          format: '.format'
+          customText: '&text=customText'
+
+        placekitten: 
+          url: 'placekitten.com/g/width/height'
+          greyscale: '/g'
+
+        placesheen: 
+          url: 'placesheen.com/width/height'
+
+        placezombies: 
+          url: 'placezombies.com/g/widthxheight'
+          greyscale: '/g'
+
+        placepuppy: 
+          url: 'placepuppy.it/width/height'
+
+        nicenicejpg: 
+          url: 'nicenicejpg.com/width/height'
+
       @parseOptions()
-      @init()
+      @create()
 
     parseOptions: ->
+      service = @options.service
       height = @options.height
       width = @options.width
 
@@ -38,88 +109,45 @@
       unless width >= 1
         @options.width = @$container.width()
 
-    init: ->
+
+    create: ->
       url = @generateUrl()
       $img = $('<img src="'+url+'" />')
       @$container.append($img)
 
     generateUrl: ->
+      # Get the current placeholder service
       service = @options.service
-      height = @options.height
-      width = @options.width
+      service_data = @services[service]
 
-      greyscale = @options.greyscale
-      category = @options.category
-      image_format = @options.image_format
-      text = @options.text
-      text_color = @options.text_color
-      background_color = @options.background_color
-      variant = @options.variant
-      image_size_keyword = @options.image_size_keyword
+      # initialize the url
+      url = 'http://' + service_data.url
 
-      url = 'http://www.'
+      # Set dimensions
+      if @options.sizeKeyword and service_data.sizeKeyword
+        url = url.replace(/width[x,\/]height/, @options.sizeKeyword)
+      else
+        url = url.replace('height', @options.height)
+        url = url.replace('width', @options.width)
 
-      switch service
-        when 'placehold.it'
-          url += 'placehold.it/'+width+'x'+height
+      # Grayscale
+      if service_data.greyscale
+        if !@options.greyscale
+          url = url.replace(service_data.greyscale, '')
 
-          if background_color then url += '/' + background_color
-          if text_color then url += '/' + text_color
-          url += image_format
-          if text then url += '&text='+text
 
-        when 'placekitten'
-          url += 'placekitten.com/'
+      # Go over replacable attributes that have custom data
+      replacable_attrs = ['backColor', 'foreColor', 'format',
+                          'customText', 'category', 'variant']
 
-          if greyscale then url += 'g/'
-          url += width+'/'+height
+      for i in [0...replacable_attrs.length]
+        attribute = replacable_attrs[i]
 
-        when 'placesheen'
-          url += 'placesheen.com/'+width+'/'+height
-
-        when 'lorempixel'
-          url += 'lorempixel.com/'
-
-          if greyscale then url += 'g/'
-          url += width+'/'+height
-          if category then url += '/' + category
-          if variant then url += '/' + variant
-          if text then url += '/'+text
-
-        when 'placedog'
-          url += 'placedog.com/'
-
-          if greyscale then url += 'g/'
-          url += width+'/'+height
-
-        when 'dummyimage'
-          url += 'dummyimage.com/'
-
-          if image_size_keyword
-            url += image_size_keyword
+        if service_data[attribute]
+          if @options[attribute]
+            url = url.replace(attribute, @options[attribute])
           else
-            url += width+'x'+height
-          if background_color then url += '/' + background_color
-          if text_color then url += '/' + text_color
-          url += image_format
-          if text then url += '&text='+text
-
-        when 'instasrc'
-          url += 'instasrc.com/'
-          url += width+'/'+height
-          if category then url += '/' + category
-          if greyscale then url += '/greyscale'
-
-        when 'nosrc'
-          url += 'nosrc.net/'
-          url += width+'x'+height
-
-        when 'fpoimg'
-          url += 'fpoimg.com/'
-          url += width+'x'+height+'?'
-          if text then url += '&text='+text
-          if background_color then url += '&bg_color=' + background_color
-          if text_color then url += '&text_color=' + text_color
+            url = url.replace(service_data[attribute], '')
 
       return url 
 
