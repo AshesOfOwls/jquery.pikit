@@ -1,3 +1,3 @@
 $(function() {
-  $(".container").children().picholder();
+  $(".container").children().pikit();
 });

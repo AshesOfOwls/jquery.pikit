@@ -3,7 +3,7 @@
 
   (function($, window, document) {
     var Plugin, defaults, pluginName;
-    pluginName = "picholder";
+    pluginName = "pikit";
     defaults = {
       service: 'placeholdus',
       height: 200,

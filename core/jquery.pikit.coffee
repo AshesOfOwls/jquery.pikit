@@ -1,11 +1,11 @@
-#  Project: jQuery.Picholder
+#  Project: jQuery.pikit
 #  Description: Generate placement image for your website through many different placeholder services.
 #  Author: Scott Elwood
 #  Maintained By: We the Media, inc.
 #  License: MIT
 
 (($, window, document) ->
-  pluginName = "picholder"
+  pluginName = "pikit"
   defaults =
     service: 'placeholdus'
 
