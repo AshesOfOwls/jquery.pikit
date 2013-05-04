@@ -5,15 +5,15 @@
     var Plugin, defaults, pluginName;
     pluginName = "picholder";
     defaults = {
-      service: 'placeboxes',
+      service: 'placeholdus',
       height: 200,
       width: 400,
       format: 'jpg',
       sizeKeyword: null,
       greyscale: false,
-      backColor: null,
-      foreColor: null,
-      customText: null,
+      backColor: 'random',
+      foreColor: 'random',
+      customText: "We be Labelein",
       category: null,
       variant: null
     };
@@ -33,6 +33,13 @@
             format: '.format',
             customText: '&text=customText'
           },
+          dummyimages: {
+            url: 'dummyimages.com/widthxheight/backColor/foreColor.format&text=customText',
+            backColor: '/backColor',
+            foreColor: '/foreColor',
+            format: '.format',
+            customText: '&text=customText'
+          },
           fpoimg: {
             url: 'fpoimg.com/widthxheight?&bg_color=backColor&text_color=foreColor&text=customText',
             backColor: '&bg_color=backColor',
@@ -43,6 +50,13 @@
             url: 'instasrc.com/width/height/category/greyscale',
             category: '/category',
             greyscale: '/greyscale'
+          },
+          ipsumimage: {
+            url: 'ipsumimage.com/widthxheight?&l=customText&f=foreColor&b=backColor&t=format',
+            customText: '&l=customText',
+            backColor: '&b=backColor',
+            foreColor: '&f=foreColor',
+            format: '&f=format'
           },
           lorempixel: {
             url: 'lorempixel.com/g/width/height/category/variant',
@@ -70,6 +84,9 @@
             format: '.format',
             customText: '&text=customText'
           },
+          placeholdus: {
+            url: 'placehold.it/widthxheight'
+          },
           placekitten: {
             url: 'placekitten.com/g/width/height',
             greyscale: '/g'
@@ -93,15 +110,22 @@
       }
 
       Plugin.prototype.parseOptions = function() {
-        var height, service, width;
-        service = this.options.service;
-        height = this.options.height;
-        width = this.options.width;
-        if (!(height >= 1)) {
+        var services;
+        if (this.options.service === 'random') {
+          services = Object.keys(this.services);
+          this.options.service = this.services[Math.floor(Math.random() * services.length)];
+        }
+        if (!(this.options.height >= 1)) {
           this.options.height = this.$container.height();
         }
-        if (!(width >= 1)) {
-          return this.options.width = this.$container.width();
+        if (!(this.options.width >= 1)) {
+          this.options.width = this.$container.width();
+        }
+        if (this.options.backColor === 'random') {
+          this.options.backColor = this.randomHex();
+        }
+        if (this.options.foreColor === 'random') {
+          return this.options.foreColor = this.randomHex();
         }
       };
 
@@ -140,6 +164,10 @@
           }
         }
         return url;
+      };
+
+      Plugin.prototype.randomHex = function() {
+        return Math.floor(Math.random() * 16777215).toString(16);
       };
 
       return Plugin;

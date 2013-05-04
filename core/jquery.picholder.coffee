@@ -7,7 +7,7 @@
 (($, window, document) ->
   pluginName = "picholder"
   defaults =
-    service: 'placeboxes'
+    service: 'placeholdus'
 
     # Formatting
     height: 200
@@ -17,11 +17,11 @@
 
     # Colors
     greyscale: false
-    backColor: null
-    foreColor: null
+    backColor: 'random'
+    foreColor: 'random'
 
     # Customize
-    customText: null
+    customText: "We be Labelein"
 
     # Specify
     category: null
@@ -42,6 +42,13 @@
           format: '.format'
           customText: '&text=customText'
 
+        dummyimages: 
+          url: 'dummyimages.com/widthxheight/backColor/foreColor.format&text=customText'
+          backColor: '/backColor'
+          foreColor: '/foreColor'
+          format: '.format'
+          customText: '&text=customText'
+
         fpoimg:
           url: 'fpoimg.com/widthxheight?&bg_color=backColor&text_color=foreColor&text=customText'
           backColor: '&bg_color=backColor'
@@ -52,6 +59,13 @@
           url: 'instasrc.com/width/height/category/greyscale'
           category: '/category'
           greyscale: '/greyscale'
+
+        ipsumimage:
+          url: 'ipsumimage.com/widthxheight?&l=customText&f=foreColor&b=backColor&t=format'
+          customText: '&l=customText'
+          backColor: '&b=backColor'
+          foreColor: '&f=foreColor'
+          format: '&f=format'
 
         lorempixel: 
           url: 'lorempixel.com/g/width/height/category/variant'
@@ -79,6 +93,9 @@
           format: '.format'
           customText: '&text=customText'
 
+        placeholdus: 
+          url: 'placehold.it/widthxheight'
+
         placekitten: 
           url: 'placekitten.com/g/width/height'
           greyscale: '/g'
@@ -100,15 +117,22 @@
       @create()
 
     parseOptions: ->
-      service = @options.service
-      height = @options.height
-      width = @options.width
+      # Service
+      if @options.service is 'random'
+        services = Object.keys(@services)
+        @options.service = @services[Math.floor(Math.random()*services.length)]
 
-      unless height >= 1
+      # Dimensions
+      unless @options.height >= 1
         @options.height = @$container.height()
-      unless width >= 1
+      unless @options.width >= 1
         @options.width = @$container.width()
 
+      # Colors
+      if @options.backColor is 'random'
+        @options.backColor = @randomHex()
+      if @options.foreColor is 'random'
+        @options.foreColor = @randomHex()
 
     create: ->
       url = @generateUrl()
@@ -135,7 +159,6 @@
         if !@options.greyscale
           url = url.replace(service_data.greyscale, '')
 
-
       # Go over replacable attributes that have custom data
       replacable_attrs = ['backColor', 'foreColor', 'format',
                           'customText', 'category', 'variant']
@@ -151,6 +174,8 @@
 
       return url 
 
+    randomHex: ->
+      return Math.floor(Math.random()*16777215).toString(16)
 
   $.fn[pluginName] = (options) ->
     @each ->
