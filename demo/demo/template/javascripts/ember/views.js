@@ -5,6 +5,10 @@ Demo.ApplicationView = Ember.View.extend({
 Demo.SimpleView = Ember.View.extend({
   templateName: 'examples/simple/index',
   didInsertElement: function() {
-    $(".container").children().pikit();
+    $(".pikit-container").children().pikit({
+      service: 'random',
+      height: 100,
+      width: 100
+    });
   }
 });

@@ -7,21 +7,21 @@
 (($, window, document) ->
   pluginName = "pikit"
   defaults =
-    service: 'placeholdus'
+    service: 'random'
 
     # Formatting
-    height: 200
-    width: 400
-    format: 'jpg'
+    height: null
+    width: null
+    format: null
     sizeKeyword: null
 
     # Colors
     greyscale: false
-    backColor: 'random'
-    foreColor: 'random'
+    backColor: null
+    foreColor: null
 
     # Customize
-    customText: "We be Labelein"
+    customText: null
 
     # Specify
     category: null
@@ -120,7 +120,7 @@
       # Service
       if @options.service is 'random'
         services = Object.keys(@services)
-        @options.service = @services[Math.floor(Math.random()*services.length)]
+        @options.service = services[Math.floor(Math.random()*services.length)]
 
       # Dimensions
       unless @options.height >= 1
