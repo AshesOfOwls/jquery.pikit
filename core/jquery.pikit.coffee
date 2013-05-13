@@ -122,9 +122,14 @@
         services = Object.keys(@services)
         @options.service = services[Math.floor(Math.random()*services.length)]
 
-      # Dimensions
-      unless @options.height >= 1
+      # Height Dimensions
+      if $.isArray(@options.height)
+        random_height = Math.floor(Math.random() * (@options.height[0] - @options.height[1] + 1)) + @options.height[1]
+        @options.height = random_height
+      else
         @options.height = @$container.height()
+
+      # Width Dimensions
       unless @options.width >= 1
         @options.width = @$container.width()
 

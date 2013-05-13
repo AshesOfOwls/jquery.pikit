@@ -110,12 +110,15 @@
       }
 
       Plugin.prototype.parseOptions = function() {
-        var services;
+        var random_height, services;
         if (this.options.service === 'random') {
           services = Object.keys(this.services);
           this.options.service = services[Math.floor(Math.random() * services.length)];
         }
-        if (!(this.options.height >= 1)) {
+        if ($.isArray(this.options.height)) {
+          random_height = Math.floor(Math.random() * (this.options.height[0] - this.options.height[1] + 1)) + this.options.height[1];
+          this.options.height = random_height;
+        } else {
           this.options.height = this.$container.height();
         }
         if (!(this.options.width >= 1)) {
