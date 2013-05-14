@@ -110,7 +110,7 @@
       }
 
       Plugin.prototype.parseOptions = function() {
-        var random_height, services;
+        var random_height, random_width, services;
         if (this.options.service === 'random') {
           services = Object.keys(this.services);
           this.options.service = services[Math.floor(Math.random() * services.length)];
@@ -118,10 +118,13 @@
         if ($.isArray(this.options.height)) {
           random_height = Math.floor(Math.random() * (this.options.height[0] - this.options.height[1] + 1)) + this.options.height[1];
           this.options.height = random_height;
-        } else {
+        } else if (this.options.height === null) {
           this.options.height = this.$container.height();
         }
-        if (!(this.options.width >= 1)) {
+        if ($.isArray(this.options.width)) {
+          random_width = Math.floor(Math.random() * (this.options.width[0] - this.options.width[1] + 1)) + this.options.width[1];
+          this.options.width = random_width;
+        } else if (this.options.width === null) {
           this.options.width = this.$container.width();
         }
         if (this.options.backColor === 'random') {
@@ -133,11 +136,10 @@
       };
 
       Plugin.prototype.create = function() {
-        var $img, url;
-        url = this.generateUrl();
-        $img = $('<img class="pikit" src="' + url + '" />');
-        this.$container.height(this.options.height).width(this.options.width);
+        var $img;
         this.$container.find("img.pikit").remove();
+        $img = $('<img class="pikit" src="' + this.generateUrl() + '" />');
+        this.$container.height(this.options.height).width(this.options.width);
         return this.$container.append($img);
       };
 

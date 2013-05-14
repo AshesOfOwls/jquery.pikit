@@ -1,3 +1,4 @@
 .pikit-container div {
-  width: 50px;
+  float: left;
+  width: 200px;
 }

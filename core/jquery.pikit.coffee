@@ -117,20 +117,27 @@
       @create()
 
     parseOptions: ->
-      # Service
+      # Determine Service
       if @options.service is 'random'
         services = Object.keys(@services)
         @options.service = services[Math.floor(Math.random()*services.length)]
 
       # Height Dimensions
       if $.isArray(@options.height)
+        # Random height between two values
         random_height = Math.floor(Math.random() * (@options.height[0] - @options.height[1] + 1)) + @options.height[1]
         @options.height = random_height
-      else
+      else if @options.height is null
+        # Inherit height
         @options.height = @$container.height()
 
       # Width Dimensions
-      unless @options.width >= 1
+      if $.isArray(@options.width)
+        # Random height between two values
+        random_width = Math.floor(Math.random() * (@options.width[0] - @options.width[1] + 1)) + @options.width[1]
+        @options.width = random_width
+      else if @options.width is null
+        # Inherit width
         @options.width = @$container.width()
 
       # Colors
@@ -140,10 +147,12 @@
         @options.foreColor = @randomHex()
 
     create: ->
-      url = @generateUrl()
-      $img = $('<img class="pikit" src="'+url+'" />')
-      @$container.height(@options.height).width(@options.width)
+      # Remove old instances
       @$container.find("img.pikit").remove()
+
+      # Create new pikit
+      $img = $('<img class="pikit" src="'+@generateUrl()+'" />')  
+      @$container.height(@options.height).width(@options.width)
       @$container.append($img)
 
     generateUrl: ->
