@@ -85,11 +85,14 @@
             customText: '&text=customText'
           },
           placeholdus: {
-            url: 'placehold.it/widthxheight'
+            url: 'placehold.us/widthxheight'
           },
           placekitten: {
             url: 'placekitten.com/g/width/height',
             greyscale: '/g'
+          },
+          placepuppy: {
+            url: 'placepuppy.it/width/height'
           },
           placesheen: {
             url: 'placesheen.com/width/height'
@@ -97,9 +100,6 @@
           placezombies: {
             url: 'placezombies.com/g/widthxheight',
             greyscale: '/g'
-          },
-          placepuppy: {
-            url: 'placepuppy.it/width/height'
           },
           nicenicejpg: {
             url: 'nicenicejpg.com/width/height'
