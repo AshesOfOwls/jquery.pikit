@@ -135,7 +135,9 @@
       Plugin.prototype.create = function() {
         var $img, url;
         url = this.generateUrl();
-        $img = $('<img src="' + url + '" />');
+        $img = $('<img class="pikit" src="' + url + '" />');
+        this.$container.height(this.options.height).width(this.options.width);
+        this.$container.find("img.pikit").remove();
         return this.$container.append($img);
       };
 

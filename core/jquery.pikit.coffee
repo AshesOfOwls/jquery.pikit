@@ -141,7 +141,9 @@
 
     create: ->
       url = @generateUrl()
-      $img = $('<img src="'+url+'" />')
+      $img = $('<img class="pikit" src="'+url+'" />')
+      @$container.height(@options.height).width(@options.width)
+      @$container.find("img.pikit").remove()
       @$container.append($img)
 
     generateUrl: ->
