@@ -176,15 +176,15 @@
       Plugin.prototype.randomHex = function(type) {
         var color, i, letters, _i;
         if (type === 'pastel') {
-          letters = 'ABCDEF'.split('');
+          letters = 'ABCDE'.split('');
         } else if (type === 'dark') {
-          letters = '01234567'.split('');
+          letters = '1234567'.split('');
         } else {
           letters = '0123456789ABCDEF'.split('');
         }
         color = '';
         for (i = _i = 0; _i < 6; i = ++_i) {
-          color += letters[Math.round(Math.random() * 5)];
+          color += letters[Math.floor(Math.random() * letters.length)];
         }
         return color;
       };

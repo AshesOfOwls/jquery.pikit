@@ -192,15 +192,15 @@
 
     randomHex: (type) ->
       if type is 'pastel'
-        letters = 'ABCDEF'.split('')
+        letters = 'ABCDE'.split('')
       else if type is 'dark'
-        letters = '01234567'.split('')
+        letters = '1234567'.split('')
       else
         letters = '0123456789ABCDEF'.split('')
 
       color = ''
       for i in [0...6]
-        color += letters[Math.round(Math.random() * 5)]
+        color += letters[Math.floor(Math.random() * letters.length)]
       color
 
   $.fn[pluginName] = (options) ->
