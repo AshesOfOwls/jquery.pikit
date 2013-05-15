@@ -131,7 +131,6 @@
           this.options.backColor = this.randomHex(this.options.backColor);
         }
         if ($.inArray(this.options.foreColor, ['random', 'pastel', 'dark']) >= 0) {
-          console.log("okay..", this.options.foreColor);
           return this.options.foreColor = this.randomHex(this.options.foreColor);
         }
       };

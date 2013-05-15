@@ -144,7 +144,6 @@
       if $.inArray(@options.backColor, ['random', 'pastel', 'dark']) >= 0
         @options.backColor = @randomHex(@options.backColor)
       if $.inArray(@options.foreColor, ['random', 'pastel', 'dark']) >= 0
-        console.log "okay..", @options.foreColor
         @options.foreColor = @randomHex(@options.foreColor)
 
     create: ->
