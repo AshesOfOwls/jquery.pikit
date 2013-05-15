@@ -124,14 +124,14 @@ $(".pikit-container").children().pikit({
   <tr>
     <td>backColor</td>
     <td>If the service is generating an image on the fly, specify the background color.</td>
-    <td>HEX code WITHOUT the # <strong>or</strong> 'random', 'pastel', 'dark'</td>
+    <td>HEX code without the # <strong>OR</strong> 'random', 'pastel', 'dark'</td>
     <td>000000, 9900FF, etc</td>
     <td>null</td>
   </tr>
   <tr>
     <td>foreColor</td>
     <td>If the service is generating an image on the fly, specify the foreground color (usually the text color).</td>
-    <td>HEX code WITHOUT the # <strong>or</strong> 'random', 'pastel', 'dark'</td>
+    <td>HEX code without the # <strong>OR</strong> 'random', 'pastel', 'dark'</td>
     <td>000000, 9900FF, etc</td>
     <td>null</td>
   </tr>
