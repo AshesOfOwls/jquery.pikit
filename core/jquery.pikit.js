@@ -5,14 +5,14 @@
     var Plugin, defaults, pluginName;
     pluginName = "pikit";
     defaults = {
-      service: 'random',
+      service: 'fpoimg',
       height: null,
       width: null,
       format: null,
       sizeKeyword: null,
       greyscale: false,
       backColor: null,
-      foreColor: null,
+      foreColor: '333333',
       customText: null,
       category: null,
       variant: null
@@ -127,10 +127,11 @@
         } else if (this.options.width === null) {
           this.options.width = this.$container.width();
         }
-        if (this.options.backColor === 'random' || 'pastel' || 'dark') {
+        if ($.inArray(this.options.backColor, ['random', 'pastel', 'dark']) >= 0) {
           this.options.backColor = this.randomHex(this.options.backColor);
         }
-        if (this.options.foreColor === 'random' || 'pastel' || 'dark') {
+        if ($.inArray(this.options.foreColor, ['random', 'pastel', 'dark']) >= 0) {
+          console.log("okay..", this.options.foreColor);
           return this.options.foreColor = this.randomHex(this.options.foreColor);
         }
       };

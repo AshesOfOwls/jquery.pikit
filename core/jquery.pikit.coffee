@@ -7,7 +7,7 @@
 (($, window, document) ->
   pluginName = "pikit"
   defaults =
-    service: 'random'
+    service: 'fpoimg'
 
     # Formatting
     height: null
@@ -18,7 +18,7 @@
     # Colors
     greyscale: false
     backColor: null
-    foreColor: null
+    foreColor: '333333'
 
     # Customize
     customText: null
@@ -141,9 +141,10 @@
         @options.width = @$container.width()
 
       # Colors
-      if @options.backColor is 'random' or 'pastel' or 'dark'
+      if $.inArray(@options.backColor, ['random', 'pastel', 'dark']) >= 0
         @options.backColor = @randomHex(@options.backColor)
-      if @options.foreColor is 'random' or 'pastel' or 'dark'
+      if $.inArray(@options.foreColor, ['random', 'pastel', 'dark']) >= 0
+        console.log "okay..", @options.foreColor
         @options.foreColor = @randomHex(@options.foreColor)
 
     create: ->
