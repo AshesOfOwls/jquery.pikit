@@ -7,7 +7,7 @@
 (($, window, document) ->
   pluginName = "pikit"
   defaults =
-    service: 'fpoimg'
+    service: 'random'
 
     # Formatting
     height: null

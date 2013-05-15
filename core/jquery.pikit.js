@@ -5,7 +5,7 @@
     var Plugin, defaults, pluginName;
     pluginName = "pikit";
     defaults = {
-      service: 'fpoimg',
+      service: 'random',
       height: null,
       width: null,
       format: null,
