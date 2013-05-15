@@ -141,10 +141,10 @@
         @options.width = @$container.width()
 
       # Colors
-      if @options.backColor is 'random'
-        @options.backColor = @randomHex()
-      if @options.foreColor is 'random'
-        @options.foreColor = @randomHex()
+      if @options.backColor is 'random' or 'pastel' or 'dark'
+        @options.backColor = @randomHex(@options.backColor)
+      if @options.foreColor is 'random' or 'pastel' or 'dark'
+        @options.foreColor = @randomHex(@options.foreColor)
 
     create: ->
       # Remove old instances
@@ -190,8 +190,18 @@
 
       return url 
 
-    randomHex: ->
-      return Math.floor(Math.random()*16777215).toString(16)
+    randomHex: (type) ->
+      if type is 'pastel'
+        letters = 'ABCDEF'.split('')
+      else if type is 'dark'
+        letters = '01234567'.split('')
+      else
+        letters = '0123456789ABCDEF'.split('')
+
+      color = ''
+      for i in [0...6]
+        color += letters[Math.round(Math.random() * 5)]
+      color
 
   $.fn[pluginName] = (options) ->
     @each ->

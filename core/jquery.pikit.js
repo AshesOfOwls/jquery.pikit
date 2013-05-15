@@ -85,14 +85,11 @@
             customText: '&text=customText'
           },
           placeholdus: {
-            url: 'placehold.us/widthxheight'
+            url: 'placehold.it/widthxheight'
           },
           placekitten: {
             url: 'placekitten.com/g/width/height',
             greyscale: '/g'
-          },
-          placepuppy: {
-            url: 'placepuppy.it/width/height'
           },
           placesheen: {
             url: 'placesheen.com/width/height'
@@ -100,6 +97,9 @@
           placezombies: {
             url: 'placezombies.com/g/widthxheight',
             greyscale: '/g'
+          },
+          placepuppy: {
+            url: 'placepuppy.it/width/height'
           },
           nicenicejpg: {
             url: 'nicenicejpg.com/width/height'
@@ -127,11 +127,11 @@
         } else if (this.options.width === null) {
           this.options.width = this.$container.width();
         }
-        if (this.options.backColor === 'random') {
-          this.options.backColor = this.randomHex();
+        if (this.options.backColor === 'random' || 'pastel' || 'dark') {
+          this.options.backColor = this.randomHex(this.options.backColor);
         }
-        if (this.options.foreColor === 'random') {
-          return this.options.foreColor = this.randomHex();
+        if (this.options.foreColor === 'random' || 'pastel' || 'dark') {
+          return this.options.foreColor = this.randomHex(this.options.foreColor);
         }
       };
 
@@ -173,8 +173,20 @@
         return url;
       };
 
-      Plugin.prototype.randomHex = function() {
-        return Math.floor(Math.random() * 16777215).toString(16);
+      Plugin.prototype.randomHex = function(type) {
+        var color, i, letters, _i;
+        if (type === 'pastel') {
+          letters = 'ABCDEF'.split('');
+        } else if (type === 'dark') {
+          letters = '01234567'.split('');
+        } else {
+          letters = '0123456789ABCDEF'.split('');
+        }
+        color = '';
+        for (i = _i = 0; _i < 6; i = ++_i) {
+          color += letters[Math.round(Math.random() * 5)];
+        }
+        return color;
       };
 
       return Plugin;
