@@ -18,7 +18,7 @@
     # Colors
     greyscale: false
     backColor: null
-    foreColor: '333333'
+    foreColor: null
 
     # Customize
     customText: null

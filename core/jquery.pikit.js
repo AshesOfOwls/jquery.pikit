@@ -12,7 +12,7 @@
       sizeKeyword: null,
       greyscale: false,
       backColor: null,
-      foreColor: '333333',
+      foreColor: null,
       customText: null,
       category: null,
       variant: null
